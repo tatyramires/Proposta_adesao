@@ -70,7 +70,7 @@ Recaptcha
     Select Frame                        ${IFRAME}   
     Wait Until Element Is Visible       ${RECAPTCHA}        10
     Click Element                       ${RECAPTCHA}
-    Sleep                               5
+    Sleep                               10
 
 Continuar
     Unselect Frame
