@@ -5,7 +5,7 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="Robot Framework 5.0.1 (Python 3.10.4 on win32)" name="Generator">
+<meta content="Robot Framework 4.1.3 (Python 3.10.2 on win32)" name="Generator">
 <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKcAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAqAAAAAAAAAAAAAAAAAAAALIAAAD/AAAA4AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA4AAAAP8AAACxAAAAAAAAAKYAAAD/AAAAuwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/AAAA/wAAAKkAAAD6AAAAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN8AAAD/AAAA+gAAAMMAAAAAAAAAAgAAAGsAAABrAAAAawAAAGsAAABrAAAAawAAAGsAAABrAAAADAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAIsAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAANEAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAAAAAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAFAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAADwAAAB8AAAAAAAAAGAAAABcAAAAAAAAAH8AAABKAAAAAAAAAAAAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAADCAAAA/wAAACkAAADqAAAA4QAAAAAAAAD7AAAA/wAAALAAAAAGAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAIwAAAP4AAAD/AAAA/wAAAGAAAAAAAAAAAAAAAMkAAAD/AAAAigAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAAAAAAAIAAAAcAAAABkAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAAAA2gAAAP8AAAD7AAAAywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN4AAAD/AAAAqwAAAP8AAACvAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALIAAAD/AAAAsgAAAAAAAAC5AAAA/wAAAMoAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMkAAAD/AAAAvAAAAAAAAAAAAAAAAAAAAKwAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAArQAAAAAAAAAAwAMAAIABAAAf+AAAP/wAAD/8AAAgBAAAP/wAAD/8AAA//AAAJIwAADHEAAA//AAAP/wAAB/4AACAAQAAwAMAAA==">
 <style media="all" type="text/css">
 /* Generic and misc styles */
@@ -318,9 +318,6 @@ th.stats-col-graph:hover {
     top: 0;
     padding: 3px;
     cursor: default;
-}
-.element-header .label {
-    margin-right: 0.5em;
 }
 .name {
     font-weight: bold;
@@ -969,7 +966,6 @@ window.model = (function () {
     }
     function Keyword(data) {
         var kw = createModelObject(data);
-        var flatTypes = ['RETURN', 'BREAK', 'CONTINUE'];
         kw.libname = data.libname;
         kw.fullName = (kw.libname ? kw.libname + '.' : '') + kw.name;
         kw.type = data.type;
@@ -1354,8 +1350,8 @@ window.testdata = function () {
     var _statistics = null;
     var LEVELS = ['TRACE', 'DEBUG', 'INFO', 'WARN', 'ERROR', 'FAIL', 'SKIP'];
     var STATUSES = ['FAIL', 'PASS', 'SKIP', 'NOT RUN'];
-    var KEYWORD_TYPES = ['KEYWORD', 'SETUP', 'TEARDOWN', 'FOR', 'ITERATION', 'IF', 'ELSE IF', 'ELSE', 'RETURN',
-                         'TRY', 'EXCEPT', 'FINALLY', 'WHILE', 'CONTINUE', 'BREAK'];
+    var KEYWORD_TYPES = ['KEYWORD', 'SETUP', 'TEARDOWN', 'FOR', 'VAR', 'IF', 'ELSE IF', 'ELSE'];
+    var MESSAGE_TYPE = 8;
     function addElement(elem) {
         if (!elem.id)
             elem.id = uniqueId();
@@ -1376,10 +1372,10 @@ window.testdata = function () {
                 elapsed];
     }
     function createMessage(element, strings) {
-        return model.Message(LEVELS[element[1]],
-                             util.timestamp(element[0]),
-                             strings.get(element[2]),
-                             strings.get(element[3]));
+        return model.Message(LEVELS[element[2]],
+                             util.timestamp(element[1]),
+                             strings.get(element[3]),
+                             strings.get(element[4]));
     }
     function parseStatus(stats) {
         return STATUSES[stats[0]];
@@ -1390,7 +1386,7 @@ window.testdata = function () {
         };
     }
     function createBodyItem(parent, element, strings, index) {
-        if (element.length < 5)
+        if (element[0] == MESSAGE_TYPE)
             return createMessage(element, strings);
         var messages = util.filter(parent.children(), function (child) {
             return child.type == 'message';
@@ -1803,25 +1799,25 @@ function stopPropagation(event) {
 window.output = {};
 </script>
 <script type="text/javascript">
-window.output["suite"] = [1,2,3,0,[],[1,0,52524],[],[[4,0,5,[6],[1,475,52047],[[1,7,8,0,0,0,0,0,[1,477,5282],[[0,9,10,0,11,12,0,0,[1,478,4958],[[478,2,13]]],[0,14,10,0,15,0,0,0,[1,5436,322],[]]]],[0,16,8,0,0,0,0,0,[1,5762,2019],[[0,17,10,0,18,19,0,0,[1,5765,13],[[5778,2,20]]],[0,21,22,0,23,24,0,0,[1,5778,2003],[[7781,2,25]]]]],[0,26,8,0,0,0,0,0,[1,7782,2142],[[0,27,10,0,28,29,0,0,[1,7783,39],[]],[0,30,10,0,31,32,0,0,[1,7823,90],[[7823,2,33]]],[0,21,22,0,23,24,0,0,[1,7913,2011],[[9924,2,25]]]]],[0,34,8,0,0,0,0,0,[1,9927,2422],[[0,27,10,0,28,35,0,0,[1,9928,52],[]],[0,30,10,0,31,36,0,0,[1,9981,366],[[9981,2,37]]],[0,21,22,0,23,24,0,0,[1,10347,2002],[[12349,2,25]]]]],[0,38,8,0,0,0,0,0,[1,12350,2388],[[0,27,10,0,28,39,0,0,[1,12351,53],[]],[0,40,10,0,41,42,0,0,[1,12404,322],[[12405,2,43]]],[0,21,22,0,23,24,0,0,[1,12726,2011],[[14737,2,25]]]]],[0,44,8,0,0,0,0,0,[1,14746,2860],[[0,27,10,0,28,45,0,0,[1,14748,79],[]],[0,40,10,0,41,46,0,0,[1,14828,768],[[14829,2,47]]],[0,21,22,0,23,24,0,0,[1,15597,2009],[[17606,2,25]]]]],[0,48,8,0,0,0,0,0,[1,17609,2894],[[0,27,10,0,28,49,0,0,[1,17613,140],[]],[0,40,10,0,41,50,0,0,[1,17754,742],[[17757,2,51]]],[0,21,22,0,23,24,0,0,[1,18496,2007],[[20503,2,25]]]]],[0,52,8,0,0,0,0,0,[1,20504,2375],[[0,27,10,0,28,53,0,0,[1,20505,45],[]],[0,40,10,0,41,54,0,0,[1,20551,316],[[20552,2,55]]],[0,21,22,0,23,24,0,0,[1,20867,2012],[[22879,2,25]]]]],[0,56,8,0,0,0,0,0,[1,22880,2182],[[0,27,10,0,28,57,0,0,[1,22881,30],[]],[0,40,10,0,41,58,0,0,[1,22911,141],[[22912,2,59]]],[0,21,22,0,23,24,0,0,[1,23053,2009],[[25062,2,25]]]]],[0,60,8,0,0,0,0,0,[1,25064,2193],[[0,27,10,0,28,61,0,0,[1,25064,31],[]],[0,40,10,0,41,62,0,0,[1,25095,156],[[25096,2,63]]],[0,21,22,0,23,24,0,0,[1,25251,2006],[[27257,2,25]]]]],[0,64,8,0,0,0,0,0,[1,27258,2117],[[0,27,10,0,28,65,0,0,[1,27259,31],[]],[0,30,10,0,31,66,0,0,[1,27291,78],[[27292,2,67]]],[0,21,22,0,23,24,0,0,[1,27369,2006],[[29375,2,25]]]]],[0,68,8,0,0,0,0,0,[1,29376,2241],[[0,27,10,0,28,69,0,0,[1,29377,34],[]],[0,40,10,0,41,70,0,0,[1,29412,202],[[29412,2,71]]],[0,21,22,0,23,24,0,0,[1,29614,2003],[[31617,2,25]]]]],[0,72,8,0,0,0,0,0,[1,31618,2372],[[0,27,10,0,28,73,0,0,[1,31619,33],[]],[0,40,10,0,41,74,0,0,[1,31652,330],[[31654,2,75]]],[0,21,22,0,23,24,0,0,[1,31982,2008],[[33990,2,25]]]]],[0,76,8,0,0,0,0,0,[1,33991,2124],[[0,27,10,0,28,77,0,0,[1,33992,34],[]],[0,30,10,0,31,78,0,0,[1,34027,73],[[34027,2,79]]],[0,21,22,0,23,24,0,0,[1,34101,2014],[[36114,2,25]]]]],[0,80,8,0,0,0,0,0,[1,36117,2123],[[0,27,10,0,28,81,0,0,[1,36118,45],[]],[0,30,10,0,31,82,0,0,[1,36164,72],[[36164,2,83]]],[0,21,22,0,23,24,0,0,[1,36237,2002],[[38239,2,25]]]]],[0,84,8,0,0,0,0,0,[1,38240,138],[[0,27,10,0,28,85,0,0,[1,38241,33],[]],[0,86,10,0,87,88,0,0,[1,38274,103],[[38274,2,89]]]]],[0,90,8,0,0,0,0,0,[1,38379,2347],[[0,27,10,0,28,91,0,0,[1,38379,49],[]],[0,40,10,0,41,92,0,0,[1,38428,289],[[38429,2,93]]],[0,21,22,0,23,24,0,0,[1,38718,2007],[[40725,2,25]]]]],[0,94,8,0,0,0,0,0,[1,40727,2215],[[0,27,10,0,28,95,0,0,[1,40727,32],[]],[0,40,10,0,41,96,0,0,[1,40759,171],[[40760,2,97]]],[0,21,22,0,23,24,0,0,[1,40930,2012],[[42942,2,25]]]]],[0,98,8,0,0,0,0,0,[1,42943,2146],[[0,27,10,0,28,99,0,0,[1,42944,34],[]],[0,30,10,0,31,100,0,0,[1,42978,99],[[42979,2,101]]],[0,21,22,0,23,24,0,0,[1,43078,2011],[[45088,2,25]]]]],[0,102,8,0,0,0,0,0,[1,45090,140],[[0,27,10,0,28,103,0,0,[1,45091,32],[]],[0,86,10,0,87,104,0,0,[1,45123,107],[[45124,2,105]]]]],[0,106,8,0,0,0,0,0,[1,45231,207],[[0,27,10,0,28,107,0,0,[1,45232,51],[]],[0,86,10,0,87,108,0,0,[1,45283,154],[[45283,2,109]]]]],[0,110,8,0,0,0,0,0,[1,45439,2155],[[0,27,10,0,28,111,0,0,[1,45440,43],[]],[0,30,10,0,31,112,0,0,[1,45483,100],[[45483,2,113]]],[0,21,22,0,23,24,0,0,[1,45584,2010],[[47594,2,25]]]]],[0,114,8,0,0,0,0,0,[1,47595,2153],[[0,27,10,0,28,115,0,0,[1,47595,31],[]],[0,30,10,0,31,116,0,0,[1,47626,109],[[47627,2,117]]],[0,21,22,0,23,24,0,0,[1,47735,2013],[[49748,2,25]]]]],[2,118,8,0,0,0,0,0,[1,49749,2773],[[0,119,10,0,120,0,0,0,[1,49750,2771],[]]]]]]],[],[1,1,0,0]];
+window.output["suite"] = [1,2,3,0,[],[1,0,32836],[],[[4,0,5,[],[1,282,32550],[[1,6,7,0,0,0,0,0,[1,282,3698],[[0,8,9,0,10,11,0,0,[1,283,3569],[[8,283,2,12]]],[0,13,9,0,14,0,0,0,[1,3852,126],[]]]],[0,15,7,0,0,0,0,0,[1,3982,2013],[[0,16,9,0,17,18,0,0,[1,3984,4],[[8,3988,2,19]]],[0,20,21,0,22,23,0,0,[1,3988,2007],[[8,5995,2,24]]]]],[0,25,7,0,0,0,0,0,[1,5996,2156],[[0,26,9,0,27,28,0,0,[1,5996,31],[]],[0,29,9,0,30,31,0,0,[1,6027,121],[[8,6028,2,32]]],[0,20,21,0,22,33,0,0,[1,6148,2004],[[8,8152,2,24]]]]],[0,34,7,0,0,0,0,0,[1,8153,2145],[[0,26,9,0,27,35,0,0,[1,8154,29],[]],[0,29,9,0,30,36,0,0,[1,8183,107],[[8,8183,2,37]]],[0,20,21,0,22,33,0,0,[1,8290,2008],[[8,10298,2,24]]]]],[0,38,7,0,0,0,0,0,[1,10300,2135],[[0,26,9,0,27,39,0,0,[1,10300,17],[]],[0,29,9,0,30,40,0,0,[1,10317,106],[[8,10317,2,41]]],[0,20,21,0,22,33,0,0,[1,10423,2012],[[8,12435,2,24]]]]],[0,42,7,0,0,0,0,0,[1,12436,5207],[[0,43,9,0,44,45,0,0,[1,12437,36],[[8,12437,2,46]]],[0,26,9,0,27,47,0,0,[1,12473,30],[]],[0,48,9,0,49,50,0,0,[1,12503,138],[[8,12503,2,51]]],[0,20,21,0,22,52,0,0,[1,12641,5002],[[8,17643,2,53]]]]],[0,54,7,0,0,0,0,0,[1,17644,2118],[[0,55,9,0,56,0,0,0,[1,17644,7],[]],[0,26,9,0,27,57,0,0,[1,17651,29],[]],[0,48,9,0,49,58,0,0,[1,17681,76],[[8,17681,2,59]]],[0,20,21,0,22,33,0,0,[1,17758,2004],[[8,19762,2,24]]]]],[0,60,7,0,0,0,0,0,[1,19763,2094],[[0,26,9,0,27,61,0,0,[1,19764,28],[]],[0,48,9,0,49,62,0,0,[1,19792,53],[[8,19793,2,63]]],[0,20,21,0,22,33,0,0,[1,19845,2012],[[8,21857,2,24]]]]],[0,64,7,0,0,0,0,0,[1,21858,148],[[0,26,9,0,27,65,0,0,[1,21859,34],[]],[0,66,9,0,67,68,0,0,[1,21893,112],[[8,21894,2,69]]]]],[0,70,7,0,0,0,0,0,[1,22007,2098],[[0,26,9,0,27,71,0,0,[1,22007,23],[]],[0,48,9,0,49,72,0,0,[1,22030,74],[[8,22031,2,73]]],[0,20,21,0,22,33,0,0,[1,22104,2001],[[8,24105,2,24]]]]],[0,74,7,0,0,0,0,0,[1,24107,2293],[[0,26,9,0,27,75,0,0,[1,24108,28],[]],[0,48,9,0,49,76,0,0,[1,24136,255],[[8,24137,2,77]]],[0,20,21,0,22,33,0,0,[1,24391,2009],[[8,26400,2,24]]]]],[0,78,7,0,0,0,0,0,[1,26401,4251],[[0,26,9,0,27,79,0,0,[1,26402,28],[]],[0,48,9,0,49,80,0,0,[1,26430,111],[[8,26431,2,81]]],[0,20,21,0,22,33,0,0,[1,26541,2003],[[8,28544,2,24]]],[0,26,9,0,27,82,0,0,[1,28545,31],[]],[0,48,9,0,49,83,0,0,[1,28576,63],[[8,28576,2,84]]],[0,20,21,0,22,33,0,0,[1,28639,2012],[[8,30651,2,24]]]]],[0,85,7,0,0,0,0,0,[1,30653,2177],[[0,26,9,0,27,86,0,0,[1,30654,29],[]],[0,87,88,0,89,90,91,0,[1,30684,0],[[8,30684,2,92]]],[0,29,9,0,30,93,0,0,[1,30684,135],[[8,30684,2,94]]],[0,20,21,0,22,33,0,0,[1,30820,2010],[[8,32830,2,24]]]]]]]],[],[1,1,0,0]];
 </script>
 <script type="text/javascript">
 window.output["strings"] = [];
 </script>
 <script type="text/javascript">
-window.output["strings"] = window.output["strings"].concat(["*","*Gerenciar P","*C:\\Users\\Taty\\Desktop\\Automação\\PRODUTO CLIENTE\\Produto_cliente_WEB\\tests\\Gerenciar_P.robot","*../tests/Gerenciar_P.robot","*Deve Gerar um Novo Produto","*<p>NOVO PRODUTO_ID\x3c/p>","*NOVO","*Abrir o Navegador","*resource","*Open Browser","*SeleniumLibrary","*<p>Opens a new browser instance to the optional <code>url\x3c/code>.\x3c/p>","*${URL}, ${BROWSER}","*Opening browser 'Chrome' to base url '<a href=\"https://tst01-produtocliente.bancorbras.com.br/\">https://tst01-produtocliente.bancorbras.com.br/\x3c/a>'.","*Maximize Browser Window","*<p>Maximizes current browser window.\x3c/p>","*Acessar a página home do site","*Title Should Be","*<p>Verifies that the current page title equals <code>title\x3c/code>.\x3c/p>","*Bancorbrás :: Produto &amp; Cliente","*Page title is 'Bancorbrás :: Produto &amp; Cliente'.","*Sleep","*BuiltIn","*<p>Pauses the test executed for the given time.\x3c/p>","*time_=2","*Slept 2 seconds","*Menu Gerenciar Produtos","*Wait Until Element Is Visible","*<p>Waits until the element <code>locator\x3c/code> is visible.\x3c/p>","*locator=${MENU_GERENCIAR_P}, timeout=10","*Click Element","*<p>Click the element identified by <code>locator\x3c/code>.\x3c/p>","*locator=${MENU_GERENCIAR_P}","*Clicking element '//span[normalize-space()='Gerenciar Produtos']'.","*Novo Produto","*locator=${BOTÃO_NOVO}, timeout=10","*locator=${BOTÃO_NOVO}","*Clicking element '//a[normalize-space()='Novo']'.","*Produto Carência id","*locator=${PRODUTO_ID}, timeout=10","*Input Text","*<p>Types the given <code>text\x3c/code> into the text field identified by <code>locator\x3c/code>.\x3c/p>","*locator=${PRODUTO_ID}, text=${09}","*Typing text '09' into text field '//input[@id='produtoCarenciaId']'.","*Descrição","*locator=${DESCRIÇAO}, timeout=10","*locator=${DESCRIÇAO}, text=${TESTE-AUTOMAÇÃO}","*Typing text 'TESTE AUTOMAÇÃO' into text field '//input[@id='descricao']'.","*Periodo da Utilização","*locator=${PERIODO_UTILIZAÇAO}, timeout=10","*locator=${PERIODO_UTILIZAÇAO}, text=${09}","*Typing text '09' into text field '//input[@id='periodoUtilizacao']'.","*Nome","*locator=${NOME}, timeout=10","*locator=${NOME}, text=${TESTE}","*Typing text 'TESTE ANDERSON' into text field '//input[@id='nome']'.","*Diárias","*locator=${DIARIAS}, timeout=10","*locator=${DIARIAS}, text=${4}","*Typing text '4' into text field '//input[@id='diarias']'.","*Estoque","*locator=${ESTOQUE}, timeout=10","*locator=${ESTOQUE}, text=${4}","*Typing text '4' into text field '//input[@id='estoque']'.","*Virada Periodo Utilizacao","*locator=${VIRADA_PERIODO}, timeout=10","*locator=${VIRADA_PERIODO}","*Clicking element '//input[@id='viradaPeriodoUtilizacao']'.","*Parcelas","*locator=${PARCELAS}, timeout=10","*locator=${PARCELAS}, text=${10}","*Typing text '10' into text field '//input[@id='parcelasTm']'.","*Tipo Duração","*locator=${TIPO_DURAÇÃO}, timeout=10","*locator=${TIPO_DURAÇÃO}, text=${PERIODOUTILIZAÇÃO}","*Typing text 'PERIODO UTILIZAÇÃO' into text field '//input[@id='tipoDuracao']'.","*Permite Conversão Diárias","*locator=${PERMITE_CON.DIARIAS}, timeout=10","*locator=${PERMITE_CON.DIARIAS}","*Clicking element '//input[@id='permiteConversaoDiarias']'.","*Ativo","*locator=${ATIVO}, timeout=10","*locator=${ATIVO}","*Clicking element '//input[@id='ativo']'.","*Categoria ID","*locator=${CATEGORIA_IG}","*Select From List By Value","*<p>Selects options from selection list <code>locator\x3c/code> by <code>values\x3c/code>.\x3c/p>","*${CATEGORIA_IG}, 1","*Selecting options from selection list 'categoriaId' by value 1.","*Tipo de Cobrança","*locator=${TIPO_CORANÇA}, timeout=10","*locator=${TIPO_CORANÇA}, text=${DESPESAS_ADICIONAIS}","*Typing text 'DESPESAS ADICIONAIS' into text field '//input[@id='tipoCobranca']'.","*Finalidade","*locator=${FINALIDADE}, timeout=10","*locator=${FINALIDADE}, text=${DUPLO}","*Typing text 'VENDA' into text field '//input[@id='finalidade']'.","*Inserir Nível","*locator=${INSERIR_N.TIPO}, timeout=10","*locator=${INSERIR_N.TIPO}","*Clicking element '//a[normalize-space()='Inserir NivelTipo']'.","*Nível de Utilização","*locator=${NIVEL_UTILIZAÇÃO}, timeout=10","*${NIVEL_UTILIZAÇÃO}, 2","*Selecting options from selection list '//select[@id='nivelUtilizacaoId']' by value 2.","*Tipo","*locator=${TIPO}, timeout=10","*${TIPO}, 2","*Selecting options from selection list '//select[@id='tipoId']' by value 2.","*Salvar Produto","*locator=${SALVAR_PRODUTO}, timeout=10","*locator=${SALVAR_PRODUTO}","*Clicking element '//button[normalize-space()='Salvar Produto']'.","*Sim Prosseguir","*locator=${SIM_PROSSEGUIR}, timeout=10","*locator=${SIM_PROSSEGUIR}","*Clicking element '//button[normalize-space()='Sim, quero prosseguir!']'.","*Fechar o Navegador","*Close Browser","*<p>Closes the current browser.\x3c/p>"]);
+window.output["strings"] = window.output["strings"].concat(["*","*Adquirir titulo","*C:\\Users\\Diego Teixeira\\Desktop\\VENDAS-ONLINE\\Proposta_Adesão\\tests\\Adquirir_titulo.robot","*../tests/Adquirir_titulo.robot","*Deve Adquirir um Título","*<p>TITULO\x3c/p>","*Abrir o Navegador","*resource","*Open Browser","*SeleniumLibrary","*<p>Opens a new browser instance to the optional <code>url\x3c/code>.\x3c/p>","*${URL}, ${BROWSER}","eNqdyzEOwjAMBdCrWF0yNdlR6cIBOINtGYLUxNWPI64PZ+j6pPc8rX/6mwT+HQZKjwpvliichIfRxEFpY6qw132pEeetlGZTjym2mnprBrU1RmThrg4Bj/z3LCgqMbHsl9pWeE/5B0ZDOek=","*Maximize Browser Window","*<p>Maximizes current browser window.\x3c/p>","*Acessar a página home do site","*Title Should Be","*<p>Verifies that the current page title equals <code>title\x3c/code>.\x3c/p>","*Bancorbras","*Page title is 'Bancorbras'.","*Sleep","*BuiltIn","*<p>Pauses the test executed for the given time.\x3c/p>","*time_=2","*Slept 2 seconds","*Nome do Usuário","*Wait Until Element Is Visible","*<p>Waits until the element <code>locator\x3c/code> is visible.\x3c/p>","*${NOME_CLENTE}, 10","*Input Text","*<p>Types the given <code>text\x3c/code> into the text field identified by <code>locator\x3c/code>.\x3c/p>","*${NOME_CLENTE}, ${NOME_GERAL}","*Typing text 'Teste Automação' into text field '//input[contains(@formcontrolname,'nomeCtrl')]'.","*2","*E-mail do Usuário","*${E-MAIL_CLIENTE}, 10","*${E-MAIL_CLIENTE}, ${E-MAIL_GERAL}","*Typing text 'teste09@gmail.com' into text field '//input[contains(@type,'email')]'.","*Telefone do Usuário","*${TELEFONE_CLIENTE}, 10","*${TELEFONE_CLIENTE}, ${TELEFONE_GERAL}","*Typing text '11981003835' into text field '//input[contains(@type,'tel')]'.","*Recaptcha","*Select Frame","*<p>Sets frame identified by <code>locator\x3c/code> as the current frame.\x3c/p>","*${IFRAME}","*Selecting frame '//iframe[@title='reCAPTCHA']'.","*${RECAPTCHA}, 10","*Click Element","*<p>Click the element identified by <code>locator\x3c/code>.\x3c/p>","*${RECAPTCHA}","*Clicking element 'recaptcha-anchor'.","*5","*Slept 5 seconds","*Continuar","*Unselect Frame","*<p>Sets the main frame as the current frame.\x3c/p>","*${CONTINUAR}, 30","*${CONTINUAR}","*Clicking element '//button[@color='yellow'][contains(.,'Continuar')]'.","*Quantas noites","*${7_NOITES}, 10","*${7_NOITES}","*Clicking element '//label[normalize-space()='7 noites']'.","*Duplo Executivo","*${DUPLO_EXECUTIVO}, 10","*Select From List By Value","*<p>Selects options from selection list <code>locator\x3c/code> by <code>values\x3c/code>.\x3c/p>","*${DUPLO_EXECUTIVO}, 1","*Selecting options from selection list '//select[@id='DuploExecutivo']' by value 1.","*Comprar","*${COMPRAR}, 10","*${COMPRAR}","*Clicking element '//button[@color='yellow'][contains(.,'Comprar')]'.","*Para Min","*${PRA_MIM}, 10","*${PRA_MIM}","*Clicking element '//mat-card-content[@class='mat-card-content'][contains(.,'Para mim')]'.","*Data de Nascimeto","*${DATA_NASCIMENTO}, 10","*${DATA_NASCIMENTO}","*Clicking element '//input[contains(@readonly,'true')]'.","*${DATA_NASCIMENTO_16}, 10","*${DATA_NASCIMENTO_16}","*Clicking element '//div[@class='mat-calendar-body-cell-content mat-focus-indicator'][contains(.,'16')]'.","*CPF","*${CPF}, 10","*Generate Random String","*String","*<p>Generates a string with a desired <code>length\x3c/code> from the given <code>chars\x3c/code>.\x3c/p>","*11, [NUMBERS]","*${11}","*${11} = 57984287743","*${CPF}, ${11}","*Typing text '57984287743' into text field '//input[contains(@formcontrolname,'cpf')]'."]);
 </script>
 <script type="text/javascript">
-window.output["stats"] = [[{"elapsed":"00:00:52","fail":0,"label":"All Tests","pass":1,"skip":0}],[{"elapsed":"00:00:52","fail":0,"label":"NOVO","pass":1,"skip":0}],[{"elapsed":"00:00:53","fail":0,"id":"s1","label":"Gerenciar P","name":"Gerenciar P","pass":1,"skip":0}]];
+window.output["stats"] = [[{"elapsed":"00:00:33","fail":0,"label":"All Tests","pass":1,"skip":0}],[],[{"elapsed":"00:00:33","fail":0,"id":"s1","label":"Adquirir titulo","name":"Adquirir titulo","pass":1,"skip":0}]];
 </script>
 <script type="text/javascript">
 window.output["errors"] = [];
 </script>
 <script type="text/javascript">
-window.output["baseMillis"] = 1654196100582;
+window.output["baseMillis"] = 1655478821416;
 </script>
 <script type="text/javascript">
-window.output["generated"] = 52557;
+window.output["generated"] = 32869;
 </script>
 <script type="text/javascript">
 window.output["expand_keywords"] = null;
@@ -2127,7 +2123,7 @@ function addExecutionLog(main) {
     <div class="element-header closed" onclick="toggleKeyword('${id}')">
       <div class="element-header-left" title="${type}  {{if name}}{{html fullName}}  {{/if}}[${status}]">
         <span class="elapsed" title="Elapsed time">${times.elapsedTime}</span>
-        <span class="label ${status.toLowerCase()}">${type}</span>
+        <span class="label keyword ${status.toLowerCase()}">${type}</span>
         <span>{{html assign}}</span>
         <span class="name"><span class="parent-name">{{html libname}}{{if libname}} . {{/if}}</span>{{html name}}</span>
         <span class="arg">{{html arguments}}</span>
@@ -2135,7 +2131,7 @@ function addExecutionLog(main) {
       <div class="element-header-right" onclick="stopPropagation(event)">
         <a class="expand" title="Expand all" href="javascript:expandAll('${id}')"></a>
         <a class="collapse" title="Collapse all" href="javascript:collapseAll('${id}')"></a>
-        <a class="link" title="Link to this item" href="#${id}" onclick="makeElementVisible('${id}')"></a>
+        <a class="link" title="Link to this keyword" href="#${id}" onclick="makeElementVisible('${id}')"></a>
       </div>
       <div class="element-header-toggle" title="Toggle visibility"></div>
     </div>
